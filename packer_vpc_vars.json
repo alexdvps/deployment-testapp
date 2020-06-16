@@ -1,0 +1,6 @@
+{
+    "aws_region": "eu-central-1",
+    "aws_az": "eu-central-1a",
+    "vpc_id": "vpc-00000000",
+    "subnet_id": "subnet-00000000"
+}

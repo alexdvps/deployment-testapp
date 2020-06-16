@@ -1,0 +1,10 @@
+server {
+   listen	{{nginx_listen_port}};
+   server_name	{{nginx_server_name}};
+   charset	utf-8;
+
+   location / {
+   	   include uwsgi_params;
+	   uwsgi_pass unix:{{application_dir}}/uwsgi.sock;
+	}
+}

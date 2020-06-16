@@ -1,0 +1,8 @@
+---
+- name: Install testapp on Ubuntu 16.04 Server
+  hosts: all
+  become: true
+  gather_facts: true
+  roles:
+    - flask
+    - nginx

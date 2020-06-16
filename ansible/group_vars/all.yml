@@ -1,0 +1,2 @@
+application_dir: /var/www/testapp
+application_repository: https://github.com/alexdvps/testapp.git

@@ -1,0 +1,58 @@
+{
+  "description": "TestApp AMI based on Ubuntu 16.04 LTS",
+  "builders": [
+    {
+      "type": "amazon-ebs",
+      "ami_name": "testapp-ubuntu-16.04-{{isotime \"2006-01-02\"}}",
+      "force_delete_snapshot": true,
+      "snapshot_tags": {
+          "Name": "packer testapp ubuntu build ami"
+      },
+      "availability_zone": "{{user `aws_az`}}",
+      "iam_instance_profile": "packer",
+      "instance_type": "t3.nano",
+      "region": "{{user `aws_region`}}",
+      "vpc_id": "{{user `vpc_id`}}",
+      "subnet_id": "{{user `subnet_id`}}",
+      "run_tags": {
+        "role": "packer",
+        "Team": "DevOps",
+        "OS": "Linux",
+        "Distribution": "Ubuntu 16.04"
+      },
+      "source_ami_filter": {
+        "filters": {
+          "virtualization-type": "hvm",
+          "name": "*ubuntu-xenial-16.04-amd64*",
+          "root-device-type": "ebs"
+        },
+        "owners": ["099720109477"],
+        "most_recent": true
+      },
+      "ssh_timeout": "10m",
+      "ssh_username": "ubuntu",
+      "ssh_keypair_name": "testapp_key_rsa",
+      "ssh_private_key_file": "testapp_key_rsa.pem",
+      "tags": {
+        "ImageType": "packer-testapp-image",
+        "CreationDate": "{{isotime}}",
+        "OS": "Linux",
+        "Distribution": "Ubuntu 16.04",
+        "Automation": "Packer, Ansible",
+        "Team": "DevOps",
+        "Description": "TestApp Ubuntu 16.04 AMI"
+      },
+      "spot_price_auto_product": "Linux/UNIX (Amazon VPC)",
+      "spot_price": "auto"
+    }
+  ],
+  "provisioners": [
+    {
+      "type": "ansible",
+      "user": "ubuntu",
+      "playbook_file": "./ansible/playbook.yml",
+      "ansible_env_vars": ["ANSIBLE_SSH_ARGS=-o IdentitiesOnly=yes"],
+      "groups": ["{{user `aws_region`}}"]
+    }
+  ]
+}
